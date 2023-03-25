@@ -3,11 +3,12 @@
   <script>
     function go(){
       print("Start");
-      var exampleSocket = new WebSocket("ws://localhost:8080/echo");
+      var exampleSocket = new WebSocket("ws://cryptodid.herokuapp.com/echo");
 
       exampleSocket.onopen = function (event) {
         print("Opened")
         exampleSocket.send("Testing");
+
       };
       exampleSocket.onmessage = function (event) {
         print(event.data);
