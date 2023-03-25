@@ -18,8 +18,11 @@ public class WebSocketServer {
     public static void main(String[] args) throws Exception
     {
         Tomcat tomcat = new Tomcat();
-        String port = "8080"; // Also change in index.html
-        tomcat.setPort(Integer.parseInt(port));
+        String webPort = System.getenv("PORT");
+        if(webPort == null || webPort.isEmpty()) {
+            webPort = "8080";
+        }// Also change in index.html
+        tomcat.setPort(Integer.parseInt(webPort));
         String webappDirLocation = setupWebapp();
         tomcat.addWebapp("/", new File(webappDirLocation).getAbsolutePath());
         tomcat.start();
