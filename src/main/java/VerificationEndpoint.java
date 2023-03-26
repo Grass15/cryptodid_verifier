@@ -43,7 +43,7 @@ public class VerificationEndpoint {
     @OnMessage
     public void onMessage(String requirement_json, Session session) throws InterruptedException, IOException {
         Requirement requirement = gson.fromJson(requirement_json, Requirement.class);
-        Verifier balanceVerifier = new Verifier(7777, requirement.getBalance());
+        Verifier balanceVerifier = new Verifier(Integer.parseInt(System.getenv("PORT")) , requirement.getBalance());
         Verifier ageVerifier = new Verifier(8888, requirement.getAge());
         Verifier creditScoreVerifier = new Verifier(9999, requirement.getCreditScore());
         Thread getUserPersonalDetailsFromWallet = getUserPersonalDetails();
