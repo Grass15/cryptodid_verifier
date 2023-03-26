@@ -1,0 +1,109 @@
+package com.loginid.cryptodid.model;
+
+import com.loginid.cryptodid.protocols.MG_FHE;
+
+import java.io.*;
+import java.util.Date;
+
+public class Claim implements Serializable {
+
+	String title;
+	int id;
+	public int attribute;
+	String type;
+	String issuerName;
+	String content;
+	Date expirationDate;
+	public MG_FHE.MG_Cipher [] ciphers;
+	Date issuingDate;
+	MG_FHE.MG_Cipher [] PK;
+	int hash; //plays the role of a signature
+
+	public Claim(String title, String type, String issuerName, String content) {
+		ciphers = new MG_FHE.MG_Cipher[8];
+		this.title = title;
+		this.type = type;
+		this.issuerName = issuerName;
+		this.content = content;
+	}
+	public int getHash() {
+		return hash;
+	}
+	public void setHash(int hash) {
+		this.hash = hash;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public MG_FHE.MG_Cipher[] getPK() {
+		return PK;
+	}
+	public void setPK(MG_FHE.MG_Cipher[] PK) {
+		this.PK = PK;
+	}
+	public Date getIssuingDate() {
+		return issuingDate;
+	}
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(Date date) {
+		this.expirationDate = date;
+	}
+
+	public void setIssuingDate(Date date) {
+		this.issuingDate = date;
+	}
+	public MG_FHE.MG_Cipher[] getCiphers() {
+		return ciphers;
+	}
+
+	public byte[] ciphersToByteArray(MG_FHE.MG_Cipher[] ciphers) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(baos);
+		oos.writeObject(ciphers);
+		return baos.toByteArray();
+	}
+	public MG_FHE.MG_Cipher[] byteArrayToCiphers(byte[] ciphersByteArray) throws IOException, ClassNotFoundException {
+		ByteArrayInputStream bais = new ByteArrayInputStream(ciphersByteArray);
+		ObjectInputStream ois = new ObjectInputStream(bais);
+		return (MG_FHE.MG_Cipher[]) ois.readObject();
+	}
+
+	public byte[] PKToByteArray(MG_FHE.MG_Cipher[] PK) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(baos);
+		oos.writeObject(PK);
+		return baos.toByteArray();
+	}
+	public MG_FHE.MG_Cipher[] byteArrayToPK(byte[] PKByteArray) throws IOException, ClassNotFoundException {
+		ByteArrayInputStream bais = new ByteArrayInputStream(PKByteArray);
+		ObjectInputStream ois = new ObjectInputStream(bais);
+		return (MG_FHE.MG_Cipher[]) ois.readObject();
+	}
+	public void setCiphers(MG_FHE.MG_Cipher[] ciphers) {
+		this.ciphers = ciphers;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public String getType() {
+		return type;
+	}
+	public String getIssuerName() {
+		return issuerName;
+	}
+	public String getContent() {
+		return content;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + this.issuerName + this.type + this.id;
+	}
+}

@@ -3,7 +3,7 @@
   <script>
     function go(){
       print("Start");
-      var exampleSocket = new WebSocket("ws://cryptodid.herokuapp.com/echo");
+      var exampleSocket = new WebSocket("ws://localhost:8080/echo");
 
       exampleSocket.onopen = function (event) {
         print("Opened")
