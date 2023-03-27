@@ -1,8 +1,8 @@
 package com.loginid.cryptodid.protocols;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Random;
+import java.io.Serializable;
 
 public class MG_FHE implements Serializable {
 	final static int LAMBDA = 512;
@@ -11,23 +11,23 @@ public class MG_FHE implements Serializable {
 	public class MG_Cipher implements Serializable {
 		public BigInteger[] alphas;
 		MG_Cipher() {
-			alphas = new BigInteger[h];
+			alphas = new BigInteger[11];
 		}
-		public MG_Cipher add(MG_Cipher a) {
+		public MG_Cipher add(MG_Cipher a, int h, BigInteger N) {
 			MG_Cipher c = new MG_Cipher();
 			for (int i = 0; i < h; i++) {
 				c.alphas[i] = ((this.alphas[i]).add(a.alphas[i])).mod(N);
 			}
 			return c;
 		}
-		public MG_Cipher mult(BigInteger a) {
+		public MG_Cipher mult(BigInteger a, int h, BigInteger N) {
 			MG_Cipher c = new MG_Cipher();
 			for (int i = 0; i < h; i++) {
 				c.alphas[i] = ((this.alphas[i]).multiply(a)).mod(N);
 			}
 			return c;
 		}
-		public MG_Cipher mult(MG_Cipher a) {
+		public MG_Cipher mult(MG_Cipher a, int h, BigInteger N, BigInteger [][][] X) {
 			MG_Cipher c = new MG_Cipher();
 			for (int i = 0; i < h; i++) {
 				c.alphas[i] = BigInteger.ZERO;
@@ -64,7 +64,7 @@ public class MG_FHE implements Serializable {
 		BigInteger m2 = new BigInteger("700", 10);
 		MG_Cipher C1 = fhe.encrypt_private(m1);
 		MG_Cipher C2 = fhe.encrypt_private(m2);
-		MG_Cipher C = C1.add(C2);
+		MG_Cipher C = C1.add(C2, fhe.h, fhe.N);
 		BigInteger m = fhe.decrypt(C);
 		System.out.println(m.toString());
 	}
@@ -77,7 +77,7 @@ public class MG_FHE implements Serializable {
 		this.N = this.p.multiply(this.q);
 		sk = new BigInteger[this.h];
 		X = new BigInteger[this.h][this.h][this.h];
-		//Create secret key 
+		//Create secret key
 		for (int i = 0; i < h; i++) {
 			sk [i] = new BigInteger(lambda, this.rnd);
 		}
@@ -113,11 +113,11 @@ public class MG_FHE implements Serializable {
 	}
 	public MG_Cipher encrypt(BigInteger m) {
 		MG_Cipher C = new MG_Cipher();
-		C = ONE.mult(m);
+		C = ONE.mult(m, h, N);
 		for (int i = 0; i < PK_SIZE; i++) {
 			double r = Math.random();
 			if (r<0.5) {
-				C = C.add(ZERO);
+				C = C.add(ZERO, h, N);
 			}
 		}
 		return C;
