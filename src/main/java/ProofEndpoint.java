@@ -18,7 +18,7 @@ public class ProofEndpoint {
     @OnOpen
     public void onOpen(Session session) throws IOException{
         System.out.println("open");
-        session.setMaxTextMessageBufferSize(2032120576);
+        session.setMaxTextMessageBufferSize(202120576);
     }
 
     @OnMessage
