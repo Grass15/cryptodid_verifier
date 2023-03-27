@@ -14,11 +14,11 @@ import java.io.IOException;
 public class ProofEndpoint {
 
     private static Gson gson = new Gson();
-    private int attributeMinimumValue = 70;
+    private int attributeMinimumValue = 75;
     @OnOpen
     public void onOpen(Session session) throws IOException{
         System.out.println("open");
-        session.setMaxTextMessageBufferSize(202120576);
+        session.setMaxTextMessageBufferSize(200000000);
     }
 
     @OnMessage

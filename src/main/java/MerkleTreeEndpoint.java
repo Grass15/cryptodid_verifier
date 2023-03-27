@@ -20,14 +20,16 @@ public class MerkleTreeEndpoint {
     private int attributeMinimumValue;
     @OnOpen
     public void onOpen(Session session) throws IOException{
-        System.out.println("open");
-        session.setMaxTextMessageBufferSize(202120576);
+        System.out.println("open merkle tree");
+        session.setMaxTextMessageBufferSize(200000000);
     }
 
     @OnMessage
     public void onMessage(String setMerkleTreeParameters_json, Session session) throws InterruptedException, IOException {
+        System.out.println("merkle received");
         SetMerkleTreeParameters setMerkleTreeParameters = gson.fromJson(setMerkleTreeParameters_json, SetMerkleTreeParameters.class);
         String[] verifierResponse = Verifier.setMerkleTree(setMerkleTreeParameters.verification, setMerkleTreeParameters.hash, setMerkleTreeParameters.proof_index, attributeMinimumValue);
         session.getBasicRemote().sendText(gson.toJson(verifierResponse));
+        System.out.println("merkle sent");
     }
 }
