@@ -21,7 +21,7 @@ public class MerkleTreeEndpoint {
     @OnOpen
     public void onOpen(Session session) throws IOException{
         System.out.println("open");
-        session.setMaxTextMessageBufferSize(300000000);
+        session.setMaxTextMessageBufferSize(2032120576);
     }
 
     @OnMessage
