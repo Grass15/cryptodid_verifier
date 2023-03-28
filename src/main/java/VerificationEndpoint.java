@@ -50,7 +50,7 @@ public class VerificationEndpoint {
     @OnMessage
     public void onMessage(String requirement_json, Session session) throws InterruptedException, IOException {
         Requirement requirement = gson.fromJson(requirement_json, Requirement.class);
-        ageProofEndpoint.attributeMinimumValue = requirement.getAge();
+        ageProofEndpoint.attributeMinimumValue = 20;
         balanceProofEndpoint.attributeMinimumValue = requirement.getBalance();
         creditScoreProofEndpoint.attributeMinimumValue = requirement.getCreditScore();
         latch.await();
