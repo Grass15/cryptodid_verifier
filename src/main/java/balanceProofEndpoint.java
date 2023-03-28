@@ -8,13 +8,12 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.io.IOException;
 
-@ServerEndpoint("/proof")
-public class ProofEndpoint {
+@ServerEndpoint("/balanceProof")
+public class balanceProofEndpoint {
 
     private static Gson gson = new Gson();
-    private int attributeMinimumValue = 75;
+    public static int attributeMinimumValue;
     @OnOpen
     public void onOpen(Session session) throws IOException{
         System.out.println("open");

@@ -8,6 +8,6 @@ public class Requirement {
         this.creditScore = creditScore;
     }
     public int getAge(){return this.age;}
-    public int getBalance(){return this.balance;}
-    public int getCreditScore(){return this.creditScore;}
+    public int getBalance(){return this.balance / 10;}
+    public int getCreditScore(){return this.creditScore / 10;}
 }

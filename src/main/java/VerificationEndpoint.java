@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.CountDownLatch;
 
 @ServerEndpoint("/verify")
 public class VerificationEndpoint {
@@ -18,9 +19,12 @@ public class VerificationEndpoint {
     private static Gson gson = new Gson();
     private User user;
     String[] userPersonalDetails ;
+    public static CountDownLatch latch = new CountDownLatch(1);
+    public static String[] responseToSend;
 
     @OnOpen
     public void onOpen(Session session) throws IOException{
+
 //        user = new User();
 //        session.getBasicRemote().sendText(gson.toJson(user));
     }
@@ -42,25 +46,14 @@ public class VerificationEndpoint {
         };
     }
 
-//    @OnMessage
-//    public void onMessage(String requirement_json, Session session) throws InterruptedException, IOException {
-//        Requirement requirement = gson.fromJson(requirement_json, Requirement.class);
-//        Verifier balanceVerifier = new Verifier(Integer.parseInt(System.getenv("PORT")) , requirement.getBalance());
-//        Verifier ageVerifier = new Verifier(8888, requirement.getAge());
-//        Verifier creditScoreVerifier = new Verifier(9999, requirement.getCreditScore());
-//        Thread getUserPersonalDetailsFromWallet = getUserPersonalDetails();
-//        Thread balanceVerification = balanceVerifier.createVerificationThread();
-//        Thread ageVerification = ageVerifier.createVerificationThread();
-//        Thread creditScoreVerification = creditScoreVerifier.createVerificationThread();
-//        getUserPersonalDetailsFromWallet.start();
-//        balanceVerification.start();
-//        ageVerification.start();
-//        creditScoreVerification.start();
-//        getUserPersonalDetailsFromWallet.join();
-//        balanceVerification.join();
-//        ageVerification.join();
-//        creditScoreVerification.join();
-//        user = new User(userPersonalDetails[0], userPersonalDetails[1], userPersonalDetails[2], userPersonalDetails[3], userPersonalDetails[4], userPersonalDetails[5], new Boolean[]{ageVerifier.getStatus(), balanceVerifier.getStatus(), creditScoreVerifier.getStatus()});
-//        session.getBasicRemote().sendText(gson.toJson(user));
-//    }
+    @OnMessage
+    public void onMessage(String requirement_json, Session session) throws InterruptedException, IOException {
+        Requirement requirement = gson.fromJson(requirement_json, Requirement.class);
+        ageProofEndpoint.attributeMinimumValue = requirement.getAge();
+        balanceProofEndpoint.attributeMinimumValue = requirement.getBalance();
+        creditScoreProofEndpoint.attributeMinimumValue = requirement.getCreditScore();
+        latch.await();
+        user = new User(responseToSend[0], responseToSend[1], responseToSend[2], responseToSend[3], responseToSend[4], responseToSend[5], new Boolean[]{Boolean.parseBoolean(responseToSend[6]), Boolean.parseBoolean(responseToSend[7]), Boolean.parseBoolean(responseToSend[8])});
+        session.getBasicRemote().sendText(gson.toJson(user));
+    }
 }
