@@ -24,7 +24,7 @@ public class VerificationEndpoint {
 
     @OnOpen
     public void onOpen(Session session) throws IOException{
-
+        session.setMaxIdleTimeout(1000 * 60 * 60);
 //        user = new User();
 //        session.getBasicRemote().sendText(gson.toJson(user));
     }
