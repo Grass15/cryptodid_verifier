@@ -1,6 +1,6 @@
 # Verifier
   
-  Guide to setup local on a local machine
+  Guide to setup on your local machine
   
   Prerequistes: 
 
@@ -18,7 +18,16 @@
       Add the bin folder to the PATH environment variable
       Confirm with the command mvn -v in a new shell
     
-   Setup:
-    - git clone 
+  Setup:
+  
+    In a new shell do the following commands
+    - git clone https://github.com/Grass15/cryptodid_verifier.git
+    - cd cryptodid_verifier
+    - mvn package
+    - target\bin\webapp (Windows) or sh target/bin/webapp
+
+  Good to know:
+    
+    There is two version of the Verifier. Heroku doesn't support pure TCP/IP. So for the deployed version (On branch Main ), the verifier 
       
   
