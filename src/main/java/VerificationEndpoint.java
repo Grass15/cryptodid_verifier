@@ -19,12 +19,13 @@ public class VerificationEndpoint {
     private static Gson gson = new Gson();
     private User user;
     String[] userPersonalDetails ;
-    public static CountDownLatch latch = new CountDownLatch(1);
+    public static CountDownLatch latch;
     public static String[] responseToSend;
 
     @OnOpen
     public void onOpen(Session session) throws IOException{
         session.setMaxIdleTimeout(1000 * 60 * 60);
+        latch = new CountDownLatch(1);
 //        user = new User();
 //        session.getBasicRemote().sendText(gson.toJson(user));
     }
