@@ -19,7 +19,7 @@ public class IsGreaterEndpoint {
     @OnOpen
     public void onOpen(Session session) throws IOException{
         System.out.println("open isgreater");
-        session.setMaxTextMessageBufferSize(200000000);
+        session.setMaxTextMessageBufferSize(20000000);
     }
 
     @OnMessage
