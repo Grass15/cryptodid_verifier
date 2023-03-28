@@ -27,6 +27,6 @@ public class ProofEndpoint {
         ProofParameters proofParameters = gson.fromJson(proofParameters_json, ProofParameters.class);
         Proof proof = Verifier.verify(proofParameters.claim, proofParameters.fhe, attributeMinimumValue);
         session.getBasicRemote().sendText(gson.toJson(proof));
-        System.out.println("sent");
+        System.out.println("sent isgreater");
     }
 }
