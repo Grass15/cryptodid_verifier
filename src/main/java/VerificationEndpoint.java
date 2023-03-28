@@ -6,11 +6,6 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.concurrent.CountDownLatch;
 
 @ServerEndpoint("/verify")
@@ -18,7 +13,6 @@ public class VerificationEndpoint {
 
     private static Gson gson = new Gson();
     private User user;
-    String[] userPersonalDetails ;
     public static CountDownLatch latch;
     public static String[] responseToSend;
 
@@ -26,31 +20,11 @@ public class VerificationEndpoint {
     public void onOpen(Session session) throws IOException{
         session.setMaxIdleTimeout(1000 * 60 * 60);
         latch = new CountDownLatch(1);
-//        user = new User();
-//        session.getBasicRemote().sendText(gson.toJson(user));
     }
-    public Thread getUserPersonalDetails(){
-        return   new Thread() {
-            public void run() {
-                try {
-                    ServerSocket ss = new ServerSocket(1111);
-                    Socket socket = ss.accept();
-                    InputStream inputStream = socket.getInputStream();
-                    ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                    userPersonalDetails = (String[]) objectInputStream.readObject();
-                    socket.close();
-                    ss.close();
-                } catch (IOException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        };
-    }
-
     @OnMessage
     public void onMessage(String requirement_json, Session session) throws InterruptedException, IOException {
         Requirement requirement = gson.fromJson(requirement_json, Requirement.class);
-        ageProofEndpoint.attributeMinimumValue = 20;
+        ageProofEndpoint.attributeMinimumValue = requirement.getAge();
         balanceProofEndpoint.attributeMinimumValue = requirement.getBalance();
         creditScoreProofEndpoint.attributeMinimumValue = requirement.getCreditScore();
         latch.await();

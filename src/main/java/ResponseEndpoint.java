@@ -1,6 +1,4 @@
 import com.google.gson.Gson;
-import com.loginid.cryptodid.protocols.SetMerkleTreeParameters;
-import com.loginid.cryptodid.protocols.Verifier;
 
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -20,7 +18,7 @@ public class ResponseEndpoint {
 
     @OnMessage
     public void onMessage(String finalResponse_json, Session session) throws InterruptedException, IOException {
-        System.out.println("merkle received");
+        System.out.println("final response received");
         VerificationEndpoint.responseToSend = gson.fromJson(finalResponse_json, String[].class);
         VerificationEndpoint.latch.countDown();
         System.out.println("merkle sent");
