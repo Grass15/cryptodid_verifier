@@ -18,6 +18,7 @@
       Add the bin folder to the PATH environment variable
       Confirm with the command mvn -v in a new shell
     
-    Setup:
+   Setup:
+    - git clone 
       
   
