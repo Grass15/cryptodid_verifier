@@ -6,15 +6,6 @@ import java.nio.channels.FileChannel;
 
 public class WebSocketServer {
 
-    private static Count count = new Count();
-
-    public static Count getCount()
-    {
-        count.add();
-        return  count;
-    }
-
-
     public static void main(String[] args) throws Exception
     {
         Tomcat tomcat = new Tomcat();

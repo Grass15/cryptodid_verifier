@@ -16,16 +16,13 @@ public class balanceProofEndpoint {
     public static int attributeMinimumValue;
     @OnOpen
     public void onOpen(Session session) throws IOException{
-        System.out.println("open");
         session.setMaxTextMessageBufferSize(20000000);
     }
 
     @OnMessage
     public void onMessage(String proofParameters_json, Session session) throws  IOException {
-        System.out.println("received");
         ProofParameters proofParameters = gson.fromJson(proofParameters_json, ProofParameters.class);
         Proof proof = Verifier.verify(proofParameters.claim, proofParameters.fhe, attributeMinimumValue);
         session.getBasicRemote().sendText(gson.toJson(proof));
-        System.out.println("sent isgreater");
     }
 }

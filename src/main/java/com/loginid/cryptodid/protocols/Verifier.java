@@ -78,7 +78,7 @@ public class Verifier {
         return status;
     }
 
-    public static String[] setMerkleTree(boolean[] verification, int hash, int proof_index, int x) { //age_attribute for display only
+    public static String[] setMerkleTree(boolean[] verification, int hash, int proof_index) { //age_attribute for display only
         String[] response = new String[3];
         int hash2 = Arrays.hashCode(verification);
 
@@ -96,7 +96,7 @@ public class Verifier {
         }
         response[2] = String.valueOf(verification[proof_index]);
         System.out.println(response[0]);
-        System.out.println(response[1] + x);
+        System.out.println(response[1]);
         //return response;
         return response;
     }

@@ -1,31 +1,17 @@
 <html>
 <head>
-  <script>
-    function go(){
-      print("Start");
-      var exampleSocket = new WebSocket("ws://localhost:8080/echo");
-
-      exampleSocket.onopen = function (event) {
-        print("Opened")
-        exampleSocket.send("Testing");
-
-      };
-      exampleSocket.onmessage = function (event) {
-        print(event.data);
-      };
-
-    }
-
-    function print(s)
-    {
-      var  p = document.createElement("p");
-      p.innerText = s;
-      document.getElementById("output").appendChild(p);
-    }
-  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title> Cryptodid </title>
 </head>
-<body onload="go()">
-Output:
-<div id="output"></div>
+<body>
+
+  <div id="output">
+    <a href="/bank-issuer">Bank Issuer</a><br>
+    <a href="/age-issuer">Age Issuer</a><br>
+    <a href="/credit-score-issuer">Credit Score Issuer</a><br>
+  </div>
+
 </body>
 </html>
