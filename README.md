@@ -20,14 +20,15 @@
     
   Setup:
   
-    In a new shell do the following commands
-    - git clone https://github.com/Grass15/cryptodid_verifier.git
-    - cd cryptodid_verifier
-    - mvn package
-    - target\bin\webapp (Windows) or sh target/bin/webapp
+  In a new shell do the following commands
+  ### ` git clone https://github.com/Grass15/cryptodid_verifier.git`
+  ### ` cd cryptodid_verifier`
+  ### ` mvn package`
+  ### ` target\bin\webapp (Windows) or sh target/bin/webapp`
 
   Good to know:
     
-    There is two version of the Verifier. Heroku doesn't support pure TCP/IP. So for the deployed version (On branch Main ), the verifier 
+    There is two version of the Verifier. Heroku doesn't support pure TCP/IP. So for the deployed version (On branch Main ), 
+    the verifier use websocket to communicate with the android app
       
   
