@@ -29,7 +29,7 @@ Setup:
 
   Good to know:
     
-    There is two version of the Verifier. Heroku doesn't support pure TCP/IP. So for the deployed version (On branch Main ), 
+    There are two versions of the Verifier. Heroku doesn't support pure TCP/IP. So for the deployed version (On branch Main ), 
     the verifier use websocket to communicate with the android app
       
   
