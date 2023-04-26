@@ -18,7 +18,7 @@ public class VerificationEndpoint {
 
     @OnOpen
     public void onOpen(Session session) throws IOException{
-        session.setMaxIdleTimeout(1000 * 60 * 60);
+        session.setMaxIdleTimeout(1000 * 60 * 60 * 60);
         latch = new CountDownLatch(1);
     }
     @OnMessage
