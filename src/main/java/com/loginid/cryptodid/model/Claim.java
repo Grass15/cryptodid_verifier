@@ -3,6 +3,9 @@ package com.loginid.cryptodid.model;
 import com.loginid.cryptodid.protocols.MG_FHE;
 
 import java.io.*;
+import java.security.*;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Date;
 
 public class Claim implements Serializable {
@@ -12,7 +15,7 @@ public class Claim implements Serializable {
 	String type;
 	String issuerName;
 	String content;
-	Date expirationDate;
+	String expirationDate;
 	public MG_FHE.MG_Cipher [] ciphers;
 	Date issuingDate;
 	MG_FHE.MG_Cipher [] PK;
@@ -54,11 +57,11 @@ public class Claim implements Serializable {
 	public Date getIssuingDate() {
 		return issuingDate;
 	}
-	public Date getExpirationDate() {
+	public String getExpirationDate() {
 		return expirationDate;
 	}
 
-	public void setExpirationDate(Date date) {
+	public void setExpirationDate(String date) {
 		this.expirationDate = date;
 	}
 
