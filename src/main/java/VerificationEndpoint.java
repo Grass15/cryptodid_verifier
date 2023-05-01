@@ -18,13 +18,11 @@ public class VerificationEndpoint {
     public static String[] responseToSend;
 
     @OnOpen
-    public void onOpen(Session session) throws IOException{
+    public void onOpen(Session session) throws IOException, InterruptedException {
         session.setMaxIdleTimeout(1000 * 60 * 60 * 60);
         latch = new CountDownLatch(1);
-    }
-    @OnMessage
-    public void onMessage(String requirement_json, Session session) throws InterruptedException, IOException {
         latch.await();
-        session.getBasicRemote().sendText(gson.toJson(user));
+        session.getBasicRemote().sendText(gson.toJson(responseToSend[0]));
     }
+
 }
