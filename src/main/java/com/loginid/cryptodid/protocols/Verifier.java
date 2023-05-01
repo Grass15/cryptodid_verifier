@@ -24,8 +24,9 @@ public class Verifier {
 
         MG_FHE.MG_Cipher sinCipher = sinVC.ciphers;
         MG_FHE.MG_Cipher A = fhe.ONE;
+        System.out.println(fhe.N);
         for (int k = 0; k < LIST_SIZE; k++) {
-            A = A.mult(sinCipher.sub(excList[k]));
+            A = A.mult(sinCipher.sub(excList[k], fhe.h, fhe.N), fhe.N, fhe.X);
         }
         //Generate the prime number
         Random rnd = new Random();

@@ -12,35 +12,35 @@ public class MG_FHE implements Serializable {
 	public class MG_Cipher implements Serializable {
 		public BigInteger[] alphas;
 		MG_Cipher() {
-			alphas = new BigInteger[h];
+			alphas = new BigInteger[11];
 		}
-		public MG_Cipher add(MG_Cipher a) {
+		public MG_Cipher add(MG_Cipher a, BigInteger N) {
 			MG_Cipher c = new MG_Cipher();
-			for (int i = 0; i < h; i++) {
+			for (int i = 0; i < 11; i++) {
 				c.alphas[i] = ((this.alphas[i]).add(a.alphas[i])).mod(N);
 			}
 			return c;
 		}
-		public MG_Cipher sub(MG_Cipher a) {
+		public MG_Cipher sub(MG_Cipher a, int h, BigInteger N) {
 			MG_Cipher c = new MG_Cipher();
 			for (int i = 0; i < h; i++) {
 				c.alphas[i] = ((this.alphas[i]).subtract(a.alphas[i])).mod(N);
 			}
 			return c;
 		}
-		public MG_Cipher mult(BigInteger a) {
+		public MG_Cipher mult(BigInteger a, BigInteger N) {
 			MG_Cipher c = new MG_Cipher();
-			for (int i = 0; i < h; i++) {
+			for (int i = 0; i < 11; i++) {
 				c.alphas[i] = ((this.alphas[i]).multiply(a)).mod(N);
 			}
 			return c;
 		}
-		public MG_Cipher mult(MG_Cipher a) {
+		public MG_Cipher mult(MG_Cipher a, BigInteger N, BigInteger [][][] X) {
 			MG_Cipher c = new MG_Cipher();
-			for (int i = 0; i < h; i++) {
+			for (int i = 0; i < 11; i++) {
 				c.alphas[i] = BigInteger.ZERO;
-				for (int j = 0; j < h; j++) {
-					for (int k = 0; k < h; k++) {
+				for (int j = 0; j < 11; j++) {
+					for (int k = 0; k < 11; k++) {
 						c.alphas[i] = ((c.alphas[i]).add(((this.alphas[j]).multiply(a.alphas[k])).multiply(X[j][k][i]))).mod(N);
 					}
 				}
@@ -48,7 +48,7 @@ public class MG_FHE implements Serializable {
 			return c;
 		}
 		public boolean is_equal(MG_Cipher a){
-			for (int i = 0; i < h; i++) {
+			for (int i = 0; i < 11; i++) {
 				if (!this.alphas[i].equals(a.alphas[i])) {
 					return false;
 				}
@@ -72,7 +72,7 @@ public class MG_FHE implements Serializable {
 		BigInteger m2 = new BigInteger("700", 10);
 		MG_Cipher C1 = fhe.encrypt_private(m1);
 		MG_Cipher C2 = fhe.encrypt_private(m2);
-		MG_Cipher C = C1.add(C2);
+		MG_Cipher C = C1.add(C2, fhe.N);
 		BigInteger m = fhe.decrypt(C);
 		System.out.println(m.toString());
 	}
@@ -121,11 +121,12 @@ public class MG_FHE implements Serializable {
 	}
 	public MG_Cipher encrypt(BigInteger m) {
 		MG_Cipher C = new MG_Cipher();
-		C = ONE.mult(m);
+		System.out.println(N);
+		C = ONE.mult(m, this.N);
 		for (int i = 0; i < PK_SIZE; i++) {
 			double r = Math.random();
 			if (r<0.5) {
-				C = C.add(ZERO);
+				C = C.add(ZERO, N);
 			}
 		}
 		return C;
