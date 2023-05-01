@@ -76,7 +76,7 @@ public class MG_FHE implements Serializable {
 		BigInteger m = fhe.decrypt(C);
 		System.out.println(m.toString());
 	}
-	MG_FHE(int h, int lambda){
+	public MG_FHE(int h, int lambda){
 		this.rnd = new Random();
 		this.lambda = lambda;
 		this.h = h;
@@ -139,3 +139,7 @@ public class MG_FHE implements Serializable {
 		return m;
 	}
 }
+
+
+
+
