@@ -13,14 +13,13 @@ public class Claim implements Serializable {
 	String issuerName;
 	String content;
 	Date expirationDate;
-	public MG_FHE.MG_Cipher [] ciphers;
+	public MG_FHE.MG_Cipher ciphers;
 	Date issuingDate;
 	MG_FHE.MG_Cipher [] PK;
 	MG_FHE fhe;
 	int hash; //plays the role of a signature
 
 	public Claim(String title, String type, String issuerName, String content) {
-		ciphers = new MG_FHE.MG_Cipher[8];
 		this.title = title;
 		this.type = type;
 		this.issuerName = issuerName;
@@ -65,20 +64,20 @@ public class Claim implements Serializable {
 	public void setIssuingDate(Date date) {
 		this.issuingDate = date;
 	}
-	public MG_FHE.MG_Cipher[] getCiphers() {
+	public MG_FHE.MG_Cipher getCiphers() {
 		return ciphers;
 	}
 
-	public byte[] ciphersToByteArray(MG_FHE.MG_Cipher[] ciphers) throws IOException {
+	public byte[] ciphersToByteArray(MG_FHE.MG_Cipher ciphers) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(baos);
 		oos.writeObject(ciphers);
 		return baos.toByteArray();
 	}
-	public MG_FHE.MG_Cipher[] byteArrayToCiphers(byte[] ciphersByteArray) throws IOException, ClassNotFoundException {
+	public MG_FHE.MG_Cipher byteArrayToCiphers(byte[] ciphersByteArray) throws IOException, ClassNotFoundException {
 		ByteArrayInputStream bais = new ByteArrayInputStream(ciphersByteArray);
 		ObjectInputStream ois = new ObjectInputStream(bais);
-		return (MG_FHE.MG_Cipher[]) ois.readObject();
+		return (MG_FHE.MG_Cipher) ois.readObject();
 	}
 
 	public byte[] fheToByteArray(MG_FHE fhe) throws IOException {
@@ -104,7 +103,7 @@ public class Claim implements Serializable {
 		ObjectInputStream ois = new ObjectInputStream(bais);
 		return (MG_FHE.MG_Cipher[]) ois.readObject();
 	}
-	public void setCiphers(MG_FHE.MG_Cipher[] ciphers) {
+	public void setCiphers(MG_FHE.MG_Cipher ciphers) {
 		this.ciphers = ciphers;
 	}
 	public String getTitle() {

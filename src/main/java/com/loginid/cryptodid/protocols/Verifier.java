@@ -12,93 +12,52 @@ import java.util.Random;
 
 
 public class Verifier {
-    public int proof_index;
-    int hash;
-    int verificationPort;
-    int attributeMinimumValue;
+    public static int index;
 
-    Boolean status;
-
-    public static MG_FHE.MG_Cipher is_greater1(MG_FHE.MG_Cipher[] C1, MG_FHE.MG_Cipher[] C2, int current, MG_FHE fhe) {
-        //S[n] = (C1[n]*(C2[n]+1)+(C1[N]+C2[N]+1)*S[n-1]
-        if (current == 0) {
-            MG_FHE.MG_Cipher t0 = C1[0].mult(C2[0].add(fhe.ONE, fhe.h, fhe.N), fhe.h, fhe.N, fhe.X);
-            return t0;
-        } else {
-            MG_FHE.MG_Cipher t1 = (C1[current]).mult((C2[current]).add(fhe.ONE, fhe.h, fhe.N), fhe.h, fhe.N, fhe.X);
-            MG_FHE.MG_Cipher t2 = (C1[current]).add((C2[current]).add(fhe.ONE, fhe.h, fhe.N), fhe.h, fhe.N);
-            MG_FHE.MG_Cipher t3 = is_greater1(C1, C2, current - 1, fhe);
-            MG_FHE.MG_Cipher t4 = t2.mult(t3, fhe.h, fhe.N, fhe.X);
-            MG_FHE.MG_Cipher t5 = t1.add(t4, fhe.h, fhe.N);
-            return (t5);
+    public static MG_FHE.MG_Cipher[] verifySIN(Claim sinVC, MG_FHE fhe){
+        int LIST_SIZE = 5;
+        int [] exclusionList = {111111111,222222222,333333333,444444444,555555555};
+        MG_FHE.MG_Cipher [] excList = new MG_FHE.MG_Cipher[LIST_SIZE];
+        for (int i = 0; i < LIST_SIZE; i++) {
+            excList[i] = fhe.encrypt(new BigInteger(""+exclusionList[i],10));
         }
-    }
 
-    public static Proof verify(Claim claim, MG_FHE fhe, int attributeMinimumValue) {
-        Proof proof = new Proof(1000, fhe.h);
-        // 4. Verify signature TBD
-        int hashCode = claim.getHash();
-        //5. Blindly Verify claim
-
-        MG_FHE.MG_Cipher[] base = new MG_FHE.MG_Cipher[8];
-        for (int i = 0; i < 8; i++) {
-            base[i] = fhe.encrypt(new BigInteger("" + ((attributeMinimumValue >> i) & 0x1), 10));
-            proof.base[i] = base[i];
+        MG_FHE.MG_Cipher sinCipher = sinVC.ciphers;
+        MG_FHE.MG_Cipher A = fhe.ONE;
+        for (int k = 0; k < LIST_SIZE; k++) {
+            A = A.mult(sinCipher.sub(excList[k]));
         }
-        MG_FHE.MG_Cipher er;
-        er = is_greater1(claim.ciphers, base, 7, fhe); //er is is true if odd, false if even
-        // Generate 1000 large odd numbers
+        //Generate the prime number
         Random rnd = new Random();
-        for (int i = 0; i < 1000; i++) {
-            BigInteger K = BigInteger.probablePrime(fhe.lambda / 2, rnd);
-            double r = Math.random();
-            if (r < 0.5) {
-                //Make it even
-                K = K.add(new BigInteger("1", 10));
+        MG_FHE.MG_Cipher [] P = new MG_FHE.MG_Cipher [1000];
+        for (int i = 0 ; i < 1000; i++) {
+            double r1 = Math.random();
+            if (r1<0.5) {
+                P[i] = fhe.encrypt(new BigInteger("0",10));
+            } else {
+
+                P[i] = fhe.encrypt(BigInteger.probablePrime(fhe.lambda / 2,
+
+                        rnd).mod(BigInteger.probablePrime(fhe.lambda / 2, rnd)));
             }
-            MG_FHE.MG_Cipher CK = fhe.encrypt(K);
-            proof.L[i] = CK;
         }
-        proof.proof_index = (int) (1000 * (Math.random()));
-        BigInteger K = BigInteger.probablePrime(fhe.lambda / 2, rnd);
-        K = K.add(new BigInteger("1", 10));
-        MG_FHE.MG_Cipher CK = fhe.encrypt(K);
-        proof.CK = CK;
-        proof.L[proof.proof_index] = er.add(CK, fhe.h, fhe.N);
-        return proof;
+        index = (int) (1000*Math.random());
+        P[index] = A;
+        return P;
     }
 
-    public int getProofIndex(int h) {
-        hash = h;
-        return proof_index;
-    }
-
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public static String[] setMerkleTree(boolean[] verification, int hash, int proof_index) { //age_attribute for display only
-        String[] response = new String[3];
-        int hash2 = Arrays.hashCode(verification);
-
-        if (hash == hash2) {
-            response[0] = "Prover is Honest";
+    public static String[] statuteOnProverResponse(BigInteger[] R){
+        String[] responseToSend = new String[3];
+        BigInteger r = R[index];
+        responseToSend[0] = String.valueOf(!r.equals(BigInteger.ZERO));
+        if (!r.equals(BigInteger.ZERO)) {
+            responseToSend[1] = "You are authorized to access the building";
         } else {
-            response[0] = "Prover is Dishonest";
+            responseToSend[1] ="You are NOT authorized to access the building";
         }
-        //status = verification[proof_index];
-        if (verification[proof_index]) {
-            response[1] = "Verification positive for this attribute";
-        } else {
-            //response[1] ="Verification Negative (" + age_attribute + " <= " + this.attributeMinimumValue + ")";
-            response[1] = "Verification negative for this attribute";
-        }
-        response[2] = String.valueOf(verification[proof_index]);
-        System.out.println(response[0]);
-        System.out.println(response[1]);
-        //return response;
-        return response;
+        return responseToSend;
     }
+
+
 
 }

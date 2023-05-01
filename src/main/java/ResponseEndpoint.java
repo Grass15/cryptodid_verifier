@@ -1,11 +1,14 @@
 import com.google.gson.Gson;
+import com.loginid.cryptodid.protocols.Verifier;
+
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.math.BigInteger;
 
-@ServerEndpoint("/finalResponse")
+@ServerEndpoint("/response")
 public class ResponseEndpoint {
     private static Gson gson = new Gson();
     @OnOpen
@@ -15,7 +18,9 @@ public class ResponseEndpoint {
 
     @OnMessage
     public void onMessage(String finalResponse_json, Session session) throws InterruptedException, IOException {
-        VerificationEndpoint.responseToSend = gson.fromJson(finalResponse_json, String[].class);
+        BigInteger[] R = gson.fromJson(finalResponse_json, BigInteger[].class);
+        VerificationEndpoint.responseToSend = Verifier.statuteOnProverResponse(R);
+        session.getBasicRemote().sendText(gson.toJson(VerificationEndpoint.responseToSend ));
         VerificationEndpoint.latch.countDown();
     }
 }
