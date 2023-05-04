@@ -1,35 +1,38 @@
 # Verifier
-  
-  Guide to setup on your local machine
-  
-  Prerequistes: 
+## Description
+The Verifier contains the protocol used in the [cryptodid Android app](https://github.com/Grass15/cryptodid_android_app.git) (in the access-control branch) to execute the [stadium use case](https://github.com/JoshuaAziake/stadium_app.git). 
+ 
+ 
+ ## Prerequistes
 
-  Java 11
-  =========
+  - [Java 11](https://www.oracle.com/ca-en/java/technologies/javase/jdk11-archive-downloads.html)
+    ```terminal 
     set the JAVA_HOME environment variable pointing to java 11 JDK installation or have the java executable on the PATH environment variable
+    ```
+  - [Maven](https://maven.apache.org/download.cgi?.)
+    ```terminal 
+    1. Download the latest binary archive version of maven
+    2. Extract the distribution archive and rename the folder Maven
+      unzip apache-maven-3.9.1-bin.zip
+      OR
+      tar xzvf apache-maven-3.9.1-bin.tar.gz
+    3. Add the bin folder to the PATH environment variable
+    4. Confirm with the command mvn -v in a new shell
+    ```
+## Setup
 
-  Maven
-  =============
-    Download the latest binary archive version of maven: https://maven.apache.org/download.cgi?.
-    Extract the distribution archive and rename the folder Maven
-      - unzip apache-maven-3.9.1-bin.zip
-        Or
-      - tar xzvf apache-maven-3.9.1-bin.tar.gz
-    Add the bin folder to the PATH environment variable
-    Confirm with the command mvn -v in a new shell
-    
-Setup:
-=============
-  
-  In a new shell do the following commands
-  ### ` git clone https://github.com/Grass15/cryptodid_verifier.git`
-  ### ` cd cryptodid_verifier`
-  ### ` mvn package`
-  ### ` target\bin\webapp (Windows) or sh target/bin/webapp`
+In a new shell perform the following commands:
+
+  ```terminal
+  git clone https://github.com/Grass15/cryptodid_verifier.git
+  cd cryptodid_verifier
+  mvn package
+  target\bin\webapp (Windows) or sh target/bin/webapp
+  ```
 
   Good to know:
     
-    There are two versions of the Verifier. Heroku doesn't support pure TCP/IP. So for the deployed version (On branch Main ), 
-    the verifier use websocket to communicate with the android app
+   There are two versions of the Verifier. Heroku doesn't support pure TCP/IP so for the deployed version (on branch Main), 
+   the verifier uses websocket to communicate with the android app.
       
   
