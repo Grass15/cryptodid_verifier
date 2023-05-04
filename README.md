@@ -1,6 +1,6 @@
 # Verifier
 ## Description
-The Verifier contains the protocol used in the [cryptodid Android app](https://github.com/Grass15/cryptodid_android_app.git) (in the access-control branch) to execute the [stadium use case](https://github.com/JoshuaAziake/stadium_app.git). 
+The Verifier contains the protocol used in the [Cryptodid Android app](https://github.com/Grass15/cryptodid_android_app.git) (in the access-control branch) to execute the [stadium use case](https://github.com/JoshuaAziake/stadium_app.git). 
  
  
  ## Prerequistes
