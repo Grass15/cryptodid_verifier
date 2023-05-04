@@ -25,6 +25,7 @@ In a new shell perform the following commands:
 
   ```terminal
   git clone https://github.com/Grass15/cryptodid_verifier.git
+  git checkout access-control
   cd cryptodid_verifier
   mvn package
   target\bin\webapp (Windows) or sh target/bin/webapp
