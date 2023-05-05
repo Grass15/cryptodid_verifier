@@ -19,18 +19,26 @@ The Verifier contains the protocol used in the [Cryptodid Android app](https://g
     3. Add the bin folder to the PATH environment variable
     4. Confirm with the command mvn -v in a new shell
     ```
+ - [Git](https://git-scm.com/download)
+   ``` terminal
+   Download the latest version
+   ```
+    
 ## Setup
 
-In a new shell perform the following commands:
-
-  ```terminal
-  git clone https://github.com/Grass15/cryptodid_verifier.git
-  git checkout access-control
-  cd cryptodid_verifier
-  mvn package
-  target\bin\webapp (Windows) or sh target/bin/webapp
-  ```
-
+1. Open a new shell 
+2. Create a copy of the remote repository in your machine
+   ```terminal
+   git clone https://github.com/Grass15/cryptodid_verifier.git
+   ``` 
+3. Run the project
+   ``` terminal
+   cd cryptodid_verifier
+   mvn package
+   target\bin\webapp (Windows) or sh target/bin/webapp
+   ```
+   <br>
+   <br>
   Good to know:
     
    There are two versions of the Verifier. Heroku doesn't support pure TCP/IP so for the deployed version (on branch Main), 
