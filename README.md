@@ -30,6 +30,7 @@ The Verifier contains the protocol used in the [Cryptodid Android app](https://g
 2. Create a copy of the remote repository in your machine
    ```terminal
    git clone https://github.com/Grass15/cryptodid_verifier.git
+   cd cryptodid_verifier
    git checkout access-control
    ``` 
 3. Run the project
