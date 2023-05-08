@@ -10,8 +10,10 @@
     <properties>
         <tomcat.version>8.0.28</tomcat.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>11</maven.compiler.target>
-        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <os_name>windows</os_name>
+        <lib_name>native</lib_name>
 
     </properties>
     <dependencies>
@@ -50,6 +52,11 @@
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.7</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>Cryptodid com.loginid.cryptodid.protocols.Verifier</finalName>
@@ -73,6 +80,92 @@
                         <goals>
                             <goal>assemble</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>1.0-alpha-11</version>
+                <extensions>true</extensions>
+                <!--                <dependencies>-->
+                <!--                    <dependency>-->
+                <!--                        <groupId>com.edwardhyde</groupId>-->
+                <!--                        <artifactId>vc-2017-support</artifactId>-->
+                <!--                        <version>1.0-SNAPSHOT</version>-->
+                <!--                    </dependency>-->
+                <!--                </dependencies>-->
+                <configuration>
+                    <javahOS>${os_name}</javahOS>
+                    <compilerProvider>msvc</compilerProvider>
+                    <!-- custom environment factory for MSVC2017-->
+                    <!--                    <envFactoryName>-->
+                    <!--                        com.edwardhyde.MSVC2017x64EnvFactory-->
+                    <!--                    </envFactoryName>-->
+                    <sources>
+                        <source>
+                            <directory>src/native/source</directory>
+                            <fileNames>
+                                <fileName>Verify.cpp</fileName>
+                            </fileNames>
+                        </source>
+                        <source>
+                            <directory>src/native/include</directory>
+                        </source>
+                    </sources>
+                    <compilerProvider>msvc</compilerProvider>
+                    <compilerStartOptions>
+                        <!-- create DLL-->
+                        <compilerStartOption>/LD</compilerStartOption>
+                        <compilerStartOption>/MD</compilerStartOption>
+                        <compilerStartOption>-I</compilerStartOption>
+                        <compilerStartOption>
+                            C:\Program Files\Java\jdk1.8.0_181\include
+                        </compilerStartOption>
+                        <compilerStartOption>-I</compilerStartOption>
+                        <compilerStartOption>
+                            C:\Program Files\Java\jdk1.8.0_181\include\win32
+                        </compilerStartOption>
+                    </compilerStartOptions>
+                    <linkerOutputDirectory>target</linkerOutputDirectory>
+                    <linkerProvider>msvc</linkerProvider>
+                    <linkerFinalName>${lib_name}</linkerFinalName>
+                    <linkerFinalNameExt>dll</linkerFinalNameExt>
+                    <linkerStartOptions>
+                        <linkerStartOption>/INCREMENTAL:NO</linkerStartOption>
+                        <linkerStartOption>/DLL</linkerStartOption>
+                    </linkerStartOptions>
+                </configuration>
+
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-jni-headers</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <executable>C:\Program Files\Java\jdk1.8.0_181\bin\javah</executable>
+                            <arguments>
+                                <argument>-verbose</argument>
+                                <argument>-jni</argument>
+                                <argument>-classpath</argument>
+                                <argument>${project.build.sourceDirectory}</argument>
+                                <argument>-d</argument>
+                                <!-- directory where generated header will be placed -->
+                                <argument>
+                                    ${project.basedir}/src/native/include
+                                </argument>
+                                <!-- target class-->
+                                <argument>com.loginid.cryptodid.protocols.TfheVerifier</argument>
+                            </arguments>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

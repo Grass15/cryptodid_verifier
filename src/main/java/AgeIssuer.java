@@ -1,3 +1,5 @@
+import com.loginid.cryptodid.protocols.TfheVerifier;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -22,6 +24,7 @@ public class AgeIssuer extends HttpServlet {
 //        out.flush();
 //        out.close();
         response.setContentType("text/html");
+        new TfheVerifier().verifyAge();
 
         PrintWriter out = response.getWriter();
         out.println("<html><head>");

@@ -27,7 +27,7 @@ public class VerificationEndpoint {
         ageProofEndpoint.attributeMinimumValue = requirement.getAge();
         balanceProofEndpoint.attributeMinimumValue = requirement.getBalance();
         creditScoreProofEndpoint.attributeMinimumValue = requirement.getCreditScore();
-        latch.await();
+        latch.await();// Pause
         user = new User(responseToSend[0], responseToSend[1], responseToSend[2], responseToSend[3], responseToSend[4], responseToSend[5], new Boolean[]{Boolean.parseBoolean(responseToSend[6]), Boolean.parseBoolean(responseToSend[7]), Boolean.parseBoolean(responseToSend[8])});
         session.getBasicRemote().sendText(gson.toJson(user));
     }
