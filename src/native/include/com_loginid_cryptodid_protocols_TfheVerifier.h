@@ -25,10 +25,10 @@ JNIEXPORT jstring JNICALL Java_com_loginid_cryptodid_protocols_TfheVerifier_veri
 
 /*
  * Class:     com_loginid_cryptodid_protocols_TfheVerifier
- * Method:    CreditScore
+ * Method:    verifyCreditScore
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_com_loginid_cryptodid_protocols_TfheVerifier_CreditScore
+JNIEXPORT jstring JNICALL Java_com_loginid_cryptodid_protocols_TfheVerifier_verifyCreditScore
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus

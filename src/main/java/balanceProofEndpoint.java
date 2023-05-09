@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @ServerEndpoint("/balanceProof")
 public class balanceProofEndpoint {
@@ -48,19 +49,34 @@ public class balanceProofEndpoint {
         }
         else if(help == 0){
             TfheVerifier tfheVerifier = new TfheVerifier();
-            tfheVerifier.verifyBalance();
-            File file = new File("Answer.data");
-            byte[] answerBytes = FileUtils.readFileToByteArray(file);
-            help --;
-            session.getBasicRemote().sendBinary(ByteBuffer.wrap(Arrays.copyOfRange(answerBytes, 0, answerBytes.length)));
+            Thread verification = new Thread() {
+                public void run() {
+                    tfheVerifier.verifyBalance();
+                    help = -10;
+                }
+            };
+            session.getBasicRemote().sendText(gson.toJson("DONE"));
+            help--;
+            verification.start();
 
         }
-        else if(help == -1 ){
+        else if(help == -10 ){
+            File file = new File("Answer.data");
+            byte[] answerBytes = FileUtils.readFileToByteArray(file);
+            session.getBasicRemote().sendBinary(ByteBuffer.wrap(Arrays.copyOfRange(answerBytes, 0, answerBytes.length)));
+            help --;
+        }
+        else if(help == -11 ){
             session.getBasicRemote().sendText("Answer.data");
             new File("cloud.key").delete();
             new File("cloud.data").delete();
             new File("PK.key").delete();
             new File("Answer.data").delete();
+        }
+        else {
+            TimeUnit.SECONDS.sleep(10);
+            System.out.println("Waiting");
+            session.getBasicRemote().sendText(gson.toJson("DONE"));
         }
 
     }
@@ -72,5 +88,4 @@ public class balanceProofEndpoint {
             byteObjects[i++] = b;
         cloudKey.addAll(Arrays.asList(byteObjects));
     }
-
 }
