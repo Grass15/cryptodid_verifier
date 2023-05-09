@@ -33,21 +33,7 @@ public class ageProofEndpoint {
         help = 3;
     }
 
-//    @OnMessage
-//    public void onMessage(String proofParameters_json, Session session) throws Exception {
-//        ProofParameters proofParameters = gson.fromJson(proofParameters_json, ProofParameters.class);
-//        Proof proof = Verifier.verify(proofParameters.claim, proofParameters.fhe, attributeMinimumValue, proofParameters.signatureBytes,proofParameters.x509Certificate);
-//
-//        if (proof != null) {
-//            session.getBasicRemote().sendText(gson.toJson(proof));
-//        } else {
-//            session.getBasicRemote().sendText("Verification failed");
-//        }
-//
-//
-//    }
     int help = 3;
-    byte[] answerBytes;
 
     @OnMessage
     public void onMessage(String proofParameters_json, Session session) throws Exception {
@@ -64,17 +50,12 @@ public class ageProofEndpoint {
         }
         else if(help == 0){
             TfheVerifier tfheVerifier = new TfheVerifier();
-            //tfheVerifier.verifyAge();
+            tfheVerifier.verifyAge();
             File file = new File("Answer.data");
-            answerBytes = FileUtils.readFileToByteArray(file);
-            from = 0;
-            to = 20000000;
+            byte[] answerBytes = FileUtils.readFileToByteArray(file);
             help --;
-            session.getBasicRemote().sendBinary(ByteBuffer.wrap(Arrays.copyOfRange(answerBytes, from, answerBytes.length)));
+            session.getBasicRemote().sendBinary(ByteBuffer.wrap(Arrays.copyOfRange(answerBytes, 0, answerBytes.length)));
 
-        }
-        else if(help == -1 && answerBytes.length > to){
-            sendFile(session, 0);
         }
         else if(help == -1 ){
             session.getBasicRemote().sendText("Answer.data");
@@ -84,31 +65,6 @@ public class ageProofEndpoint {
             new File("Answer.data").delete();
         }
 
-        else if(help == -2 ){
-            session.getBasicRemote().sendText("Answer.data");
-            new File("cloud.key").delete();
-            new File("cloud.data").delete();
-            new File("PK.key").delete();
-            new File("Answer.data").delete();
-        }
-
-
-    }
-    int from, to;
-
-    public void sendFile(Session session, int indicator) throws IOException {
-
-        System.out.println("from"+from);
-
-        if(indicator == 0){
-            session.getBasicRemote().sendBinary(ByteBuffer.wrap(Arrays.copyOfRange(answerBytes, from, answerBytes.length)));
-            from = to;
-            to += 20000000;
-            System.out.println("from"+from);
-        }
-        else{
-            session.getBasicRemote().sendBinary(ByteBuffer.wrap(Arrays.copyOfRange(answerBytes, from, answerBytes.length)));
-        }
     }
     @OnMessage(maxMessageSize = 20000000)
     public void onMessage(byte[] cloudKeypiece, Session session) throws Exception {

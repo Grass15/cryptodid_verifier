@@ -14,5 +14,5 @@ public class TfheVerifier {
     // Declare a native method sayHello() that receives no arguments and returns void
     public native String verifyAge();
     public native String verifyBalance();
-    public native String CreditScore();
+    public native String verifyCreditScore();
 }
