@@ -23,6 +23,7 @@ public class proofEndpoint {
     public static int attributeMinimumValue;
     @OnOpen
     public void onOpen(Session session) throws IOException{
+        System.out.println(VerificationEndpoint.cppServerUrl);
         session.getBasicRemote().sendText(VerificationEndpoint.cppServerUrl);
     }
 
