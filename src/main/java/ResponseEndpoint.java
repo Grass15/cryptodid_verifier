@@ -18,9 +18,10 @@ public class ResponseEndpoint {
 
     @OnMessage
     public void onMessage(String finalResponse_json, Session session) throws InterruptedException, IOException {
-        BigInteger[] R = gson.fromJson(finalResponse_json, BigInteger[].class);
-        VerificationEndpoint.responseToSend = Verifier.statuteOnProverResponse(R);
+        //BigInteger[] R = gson.fromJson(finalResponse_json, BigInteger[].class);
+        //VerificationEndpoint.responseToSend = Verifier.statuteOnProverResponse(R);
         session.getBasicRemote().sendText(gson.toJson(VerificationEndpoint.responseToSend ));
+        VerificationEndpoint.responseToSend = finalResponse_json;
         VerificationEndpoint.latch.countDown();
     }
 }
