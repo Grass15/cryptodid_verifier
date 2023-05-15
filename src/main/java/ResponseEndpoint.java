@@ -17,11 +17,19 @@ public class ResponseEndpoint {
     }
 
     @OnMessage
-    public void onMessage(String finalResponse_json, Session session) throws InterruptedException, IOException {
-        //BigInteger[] R = gson.fromJson(finalResponse_json, BigInteger[].class);
-        //VerificationEndpoint.responseToSend = Verifier.statuteOnProverResponse(R);
-        session.getBasicRemote().sendText(gson.toJson(VerificationEndpoint.responseToSend ));
-        VerificationEndpoint.responseToSend = finalResponse_json;
+    public void onMessage(String response_json, Session session) throws InterruptedException, IOException {
+        int walletHonestyProof = Integer.parseInt(response_json);
+        if(walletHonestyProof == 0){
+            VerificationEndpoint.responseToSend = String.valueOf(false);
+            session.getBasicRemote().sendText(gson.toJson(new String[]{"Prover is honest", "You are NOT authorized to access the building"}));
+        } else if (walletHonestyProof == VerificationEndpoint.honestyProof) {
+            VerificationEndpoint.responseToSend = String.valueOf(true);
+            session.getBasicRemote().sendText(gson.toJson(new String[]{"Prover is honest", "You are authorized to access the building"}));
+        }
+        else{
+            VerificationEndpoint.responseToSend = String.valueOf(false);
+            session.getBasicRemote().sendText(gson.toJson(new String[]{"Prover is dishonest", "You are NOT authorized to access the building"}));
+        }
         VerificationEndpoint.latch.countDown();
     }
 }
