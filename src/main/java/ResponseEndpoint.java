@@ -15,8 +15,10 @@ public class ResponseEndpoint {
 
     @OnMessage
     public void onMessage(String finalResponse_json, Session session) throws InterruptedException, IOException {
+        System.out.println(finalResponse_json);
         VerificationEndpoint.responseToSend = gson.fromJson(finalResponse_json, String[].class);
         VerificationEndpoint.help = -10;
+
         VerificationEndpoint.latch.countDown();
     }
 }

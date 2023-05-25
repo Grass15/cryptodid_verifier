@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@ServerEndpoint("/creditScoreProof")
+@ServerEndpoint("/creditscoreProof")
 public class creditScoreProofEndpoint {
     private static Gson gson = new Gson();
 
@@ -28,6 +28,7 @@ public class creditScoreProofEndpoint {
         session.setMaxTextMessageBufferSize(20000000);
         session.setMaxBinaryMessageBufferSize(20000000);
         session.setMaxIdleTimeout(1000 * 60 * 60 * 60);
+        System.out.println("Connected");
         help = 3;
     }
 

@@ -11,7 +11,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.io.IOException;
 
-@ServerEndpoint("/setMerkleTree")
+@ServerEndpoint("/voteRegistration")
 public class MerkleTreeEndpoint {
     Gson gson = new Gson();
     @OnOpen
@@ -20,9 +20,7 @@ public class MerkleTreeEndpoint {
     }
 
     @OnMessage
-    public void onMessage(String setMerkleTreeParameters_json, Session session) throws InterruptedException, IOException {
-        SetMerkleTreeParameters setMerkleTreeParameters = gson.fromJson(setMerkleTreeParameters_json, SetMerkleTreeParameters.class);
-        String[] verifierResponse = Verifier.setMerkleTree(setMerkleTreeParameters.verification, setMerkleTreeParameters.hash, setMerkleTreeParameters.proof_index);
-        session.getBasicRemote().sendText(gson.toJson(verifierResponse));
+    public void onMessage(String message, Session session) throws InterruptedException, IOException {
+       System.out.println(message);
     }
 }

@@ -31,6 +31,7 @@ public class ageProofEndpoint {
         session.setMaxTextMessageBufferSize(20000000);
         session.setMaxBinaryMessageBufferSize(20000000);
         session.setMaxIdleTimeout(1000 * 60 * 60 * 60);
+        System.out.println("Connected");
         help = 3;
     }
 
