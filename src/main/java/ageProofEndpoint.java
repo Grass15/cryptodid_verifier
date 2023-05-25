@@ -20,9 +20,9 @@ public class ageProofEndpoint {
     }
 
     @OnMessage
-    public void onMessage(String proofParameters_json, Session session) throws  IOException {
+    public void onMessage(String proofParameters_json, Session session) throws Exception {
         ProofParameters proofParameters = gson.fromJson(proofParameters_json, ProofParameters.class);
-        Proof proof = Verifier.verify(proofParameters.claim, proofParameters.fhe, attributeMinimumValue);
+        Proof proof = Verifier.verify(proofParameters.claim, proofParameters.fhe, attributeMinimumValue, proofParameters.signatureBytes,proofParameters.x509Certificate);
         session.getBasicRemote().sendText(gson.toJson(proof));
     }
 }

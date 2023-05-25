@@ -7,6 +7,8 @@ import java.io.*;
 import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.Signature;
+import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -34,10 +36,15 @@ public class Verifier {
         }
     }
 
-    public static Proof verify(Claim claim, MG_FHE fhe, int attributeMinimumValue) {
+    public static Proof verify(Claim claim, MG_FHE fhe, int attributeMinimumValue,byte[] signatureBytes, X509Certificate certificate) throws Exception {
         Proof proof = new Proof(1000, fhe.h);
         // 4. Verify signature TBD
         int hashCode = claim.getHash();
+        System.out.println("signature verification : "+verifySignature(claim,signatureBytes,certificate));
+        if (!verifySignature(claim, signatureBytes, certificate)){
+            System.out.println("signature verification faild");
+            return null;
+        }
         //5. Blindly Verify claim
 
         MG_FHE.MG_Cipher[] base = new MG_FHE.MG_Cipher[8];
@@ -71,6 +78,24 @@ public class Verifier {
     public int getProofIndex(int h) {
         hash = h;
         return proof_index;
+    }
+
+    public static boolean verifySignature(Claim claim, byte[] signatureBytes, X509Certificate certificate) throws Exception {
+        // Create a Signature object and initialize it with the public key from the certificate
+        Signature verifier = Signature.getInstance("SHA256withRSA");
+        verifier.initVerify(certificate);
+        byte[] claimBytes = serialize(claim);
+        verifier.update(claimBytes);
+
+        // Verify the signature
+        return verifier.verify(signatureBytes);
+    }
+
+    private static byte[] serialize(Claim claim) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(out);
+        os.writeObject(claim);
+        return out.toByteArray();
     }
 
 
