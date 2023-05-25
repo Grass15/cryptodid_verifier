@@ -8,8 +8,10 @@ import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.Signature;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Random;
 
 
@@ -36,12 +38,12 @@ public class Verifier {
         }
     }
 
-    public static Proof verify(Claim claim, MG_FHE fhe, int attributeMinimumValue,byte[] signatureBytes, X509Certificate certificate) throws Exception {
+    public static Proof verify(Claim claim, MG_FHE fhe, int attributeMinimumValue,byte[] signatureBytes, String base64Certificate) throws Exception {
         Proof proof = new Proof(1000, fhe.h);
         // 4. Verify signature TBD
         int hashCode = claim.getHash();
-        System.out.println("signature verification : "+verifySignature(claim,signatureBytes,certificate));
-        if (!verifySignature(claim, signatureBytes, certificate)){
+        System.out.println("signature verification : "+verifySignature(claim,signatureBytes,base64Certificate));
+        if (!verifySignature(claim, signatureBytes, base64Certificate)){
             System.out.println("signature verification faild");
             return null;
         }
@@ -80,8 +82,13 @@ public class Verifier {
         return proof_index;
     }
 
-    public static boolean verifySignature(Claim claim, byte[] signatureBytes, X509Certificate certificate) throws Exception {
+    public static boolean verifySignature(Claim claim, byte[] signatureBytes, String base64Certificate) throws Exception {
         // Create a Signature object and initialize it with the public key from the certificate
+        byte[] certificateBytes = Base64.getDecoder().decode(base64Certificate);
+
+        // Create an X509Certificate object from the byte array
+        CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+        X509Certificate certificate = (X509Certificate) certificateFactory.generateCertificate(new ByteArrayInputStream(certificateBytes));
         Signature verifier = Signature.getInstance("SHA256withRSA");
         verifier.initVerify(certificate);
         byte[] claimBytes = serialize(claim);

@@ -22,7 +22,7 @@ public class balanceProofEndpoint {
     @OnMessage
     public void onMessage(String proofParameters_json, Session session) throws Exception {
         ProofParameters proofParameters = gson.fromJson(proofParameters_json, ProofParameters.class);
-        Proof proof = Verifier.verify(proofParameters.claim, proofParameters.fhe, attributeMinimumValue, proofParameters.signatureBytes,proofParameters.x509Certificate);
+        Proof proof = Verifier.verify(proofParameters.claim, proofParameters.fhe, attributeMinimumValue, proofParameters.signatureBytes,proofParameters.base64Certificate);
         session.getBasicRemote().sendText(gson.toJson(proof));
     }
 }
