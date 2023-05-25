@@ -7,7 +7,10 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.security.cert.X509Certificate;
 
 @ServerEndpoint("/creditScoreProof")
 public class creditScoreProofEndpoint {
@@ -21,7 +24,11 @@ public class creditScoreProofEndpoint {
     @OnMessage
     public void onMessage(String proofParameters_json, Session session) throws Exception {
         ProofParameters proofParameters = gson.fromJson(proofParameters_json, ProofParameters.class);
-        Proof proof = Verifier.verify(proofParameters.claim, proofParameters.fhe, attributeMinimumValue,  proofParameters.signatureBytes,proofParameters.certificateBytes);
+        ByteArrayInputStream bais = new ByteArrayInputStream(proofParameters.certificateBytes);
+        ObjectInputStream ois = new ObjectInputStream(bais);
+        X509Certificate x509Certificate = (X509Certificate) ois.readObject();
+        System.out.println(x509Certificate);
+        Proof proof = Verifier.verify(proofParameters.claim, proofParameters.fhe, attributeMinimumValue, proofParameters.signatureBytes, x509Certificate);
         session.getBasicRemote().sendText(gson.toJson(proof));
     }
 }

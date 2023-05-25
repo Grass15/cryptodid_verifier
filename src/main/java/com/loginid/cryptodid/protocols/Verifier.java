@@ -38,12 +38,12 @@ public class Verifier {
         }
     }
 
-    public static Proof verify(Claim claim, MG_FHE fhe, int attributeMinimumValue,byte[] signatureBytes, byte[] certificateBytes) throws Exception {
+    public static Proof verify(Claim claim, MG_FHE fhe, int attributeMinimumValue,byte[] signatureBytes, X509Certificate certificate) throws Exception {
         Proof proof = new Proof(1000, fhe.h);
         // 4. Verify signature TBD
         int hashCode = claim.getHash();
-        System.out.println("signature verification : "+verifySignature(claim,signatureBytes,certificateBytes));
-        if (!verifySignature(claim, signatureBytes, certificateBytes)){
+        System.out.println("signature verification : "+verifySignature(claim,signatureBytes,certificate));
+        if (!verifySignature(claim, signatureBytes, certificate)){
             System.out.println("signature verification faild");
             return null;
         }
@@ -82,13 +82,13 @@ public class Verifier {
         return proof_index;
     }
 
-    public static boolean verifySignature(Claim claim, byte[] signatureBytes, byte[] certificateBytes) throws Exception {
+    public static boolean verifySignature(Claim claim, byte[] signatureBytes, X509Certificate certificate) throws Exception {
         // Create a Signature object and initialize it with the public key from the certificate
-        System.out.println(certificateBytes);
+        System.out.println(certificate);
 
         // Create an X509Certificate object from the byte array
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-        X509Certificate certificate = (X509Certificate) certificateFactory.generateCertificate(new ByteArrayInputStream(certificateBytes));
+        //X509Certificate certificate = (X509Certificate) certificateFactory.generateCertificate(new ByteArrayInputStream(certificateBytes));
         Signature verifier = Signature.getInstance("SHA256withRSA");
         verifier.initVerify(certificate);
         byte[] claimBytes = serialize(claim);
