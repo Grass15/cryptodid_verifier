@@ -28,7 +28,6 @@ public class ageProofEndpoint {
         ByteArrayInputStream bais = new ByteArrayInputStream(proofParameters.certificateBytes);
         ObjectInputStream ois = new ObjectInputStream(bais);
         X509Certificate x509Certificate = (X509Certificate) ois.readObject();
-        System.out.println(proofParameters.signatureBytes);
         Proof proof = Verifier.verify(proofParameters.claim, proofParameters.fhe, attributeMinimumValue, proofParameters.signatureBytes, x509Certificate);
         session.getBasicRemote().sendText(gson.toJson(proof));
     }
