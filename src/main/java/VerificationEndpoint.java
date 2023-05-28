@@ -1,5 +1,6 @@
 import com.google.gson.Gson;
 import com.loginid.cryptodid.WebsocketClientEndpoint;
+import com.loginid.cryptodid.model.Claim;
 import com.loginid.cryptodid.protocols.Verifier;
 
 import javax.websocket.OnMessage;
@@ -9,6 +10,8 @@ import javax.websocket.server.ServerEndpoint;
 import javax.websocket.ClientEndpoint;
 import java.io.IOException;
 import java.net.URI;
+import java.security.Signature;
+import java.security.cert.X509Certificate;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.net.URISyntaxException;
@@ -28,6 +31,7 @@ public class VerificationEndpoint {
         session.setMaxIdleTimeout(1000 * 60 * 60);
         latch = new CountDownLatch(1);
     }
+
     @OnMessage
     public void onMessage(String requirement_json, Session session) throws InterruptedException, IOException {
 
