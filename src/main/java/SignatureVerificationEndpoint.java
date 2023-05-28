@@ -22,10 +22,7 @@ import java.util.concurrent.CountDownLatch;
 public class SignatureVerificationEndpoint {
 
     private static Gson gson = new Gson();
-    private User user;
-    public static CountDownLatch latch;
-    public static String[] responseToSend;
-    public static final String cppServerUrl = "192.168.11.102:8080";
+
     public static int help = 1;
 
     @OnOpen
