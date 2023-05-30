@@ -6,8 +6,6 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.security.Signature;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
@@ -49,7 +47,7 @@ public class SignatureVerificationEndpoint {
         verifier.initVerify(x509Certificate);
         verifier.update(claimBytes);
         if(verifier.verify(signatureBytes)){
-            String url = "http://192.168.11.105:3000/isvcinRevocationsMerkleTree?revNonce="+ Arrays.toString(revocationNonce) +"&version="+version+"\"";
+            String url = "https://weak-red-termite-cape.cyclic.app/isvcinRevocationsMerkleTree?revNonce="+ Arrays.toString(revocationNonce) +"&version="+version+"\"";
             return !Boolean.parseBoolean(this.isVCInRevocationTree(url));
         }
         else {
