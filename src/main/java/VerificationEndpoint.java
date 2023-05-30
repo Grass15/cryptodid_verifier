@@ -25,7 +25,6 @@ public class VerificationEndpoint {
     public static String[] responseToSend;
     public static final String cppServerUrl = "192.168.1.25:7070";
     public static int help = 1;
-    public static int honestyProof;
 
     @OnOpen
     public void onOpen(Session session) throws IOException{
@@ -49,8 +48,6 @@ public class VerificationEndpoint {
                 public void handleMessage(String message) {
 
                     System.out.println(message);
-                    honestyProof = Integer.parseInt(message);
-                    System.out.println(honestyProof);
                 }
             });
 
